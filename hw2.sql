@@ -34,13 +34,13 @@ INSERT INTO courses (name, is_exam, min_grade, max_grade) VALUES
 ('Психология коммуникаций', FALSE, 0, 100),
 ('Компьютерное зрение', TRUE, 0, 100);
 
-SELECT * FROM courses;
+SELECT * FROM courses LIMIT 10;
 
 INSERT INTO groups (full_name, short_name, students_ids) VALUES
 ('Искусственный интеллект и наука о данных', 'ИИНОД', NULL),
 ('Программная инженерия', 'ПИ', NULL);
 
-SELECT * FROM groups;
+SELECT * FROM groups LIMIT 2;
 
 INSERT INTO students (first_name, last_name, group_id, courses_ids) VALUES
 ('Артём','Пышный', 1, '{1, 2, 3, 4, 5}'),
@@ -49,7 +49,7 @@ INSERT INTO students (first_name, last_name, group_id, courses_ids) VALUES
 ('Кемал','Курей', 2, '{2, 4, 6}'),
 ('Артём','Панов', 2, '{2, 4, 6}');
 
-SELECT * FROM students;
+SELECT * FROM students  LIMIT 10;
 
 -- С помощью подзапроса заполним значения массива данных students_ids в таблице Groups
 UPDATE groups
@@ -59,7 +59,7 @@ SET students_ids = (
     WHERE students.group_id = groups.id
 );
 
-SELECT * FROM groups;
+SELECT * FROM groups  LIMIT 10;
 
 CREATE TABLE machinelearning
 (
@@ -75,7 +75,7 @@ INSERT INTO machinelearning (student_id, grade, grade_str) VALUES
 (4, 37, NULL),
 (5, 49, NULL);
 
-SELECT * FROM machinelearning;
+SELECT * FROM machinelearning  LIMIT 10;
 
 -- С помощью запроса заполним значения поля grade_str в таблице machinelearning
 UPDATE machinelearning
@@ -89,7 +89,7 @@ SET grade_str =
 	    ELSE 'F'
     END;
 
-SELECT * FROM machinelearning;
+SELECT * FROM machinelearning  LIMIT 10;
 
 -- Процедуры фильтрации
 
@@ -161,7 +161,7 @@ INSERT INTO student_courses (student_id, course_id) VALUES
 (5,4),
 (5,6);
 
-SELECT * FROM student_courses;
+SELECT * FROM student_courses  LIMIT 21;
 
 INSERT INTO group_courses (group_id, course_id) VALUES
 (1,1),
@@ -173,15 +173,15 @@ INSERT INTO group_courses (group_id, course_id) VALUES
 (2,4),
 (2,6);
 
-SELECT * FROM group_courses;
+SELECT * FROM group_courses LIMIT 10;
 
 ALTER TABLE students DROP COLUMN courses_ids; 
 
 ALTER TABLE groups DROP COLUMN students_ids; 
 
-SELECT * FROM students;
+SELECT * FROM students  LIMIT 10;
 
-SELECT * FROM groups;
+SELECT * FROM groups  LIMIT 10;
 
 ALTER TABLE courses ADD UNIQUE (name); 
 
@@ -216,7 +216,7 @@ INSERT INTO socialweb (student_id, grade, grade_str) VALUES
 (2, 25, NULL),
 (3, 47, NULL);
 
-SELECT * FROM socialweb;
+SELECT * FROM socialweb LIMIT 3;
 
 UPDATE socialweb
 SET grade_str = 
@@ -229,7 +229,7 @@ SET grade_str =
 	    ELSE 'F'
     END;
 
-SELECT * FROM socialweb;
+SELECT * FROM socialweb LIMIT 3;
 
 -------------------------------------------------------------------------------------------
 
@@ -245,7 +245,7 @@ INSERT INTO tbs (student_id, grade, grade_str) VALUES
 (2, 37, NULL),
 (3, 40, NULL);
 
-SELECT * FROM tbs;
+SELECT * FROM tbs  LIMIT 3;
 
 UPDATE tbs
 SET grade_str = 
@@ -258,7 +258,7 @@ SET grade_str =
 	    ELSE 'F'
     END;
 
-SELECT * FROM tbs;
+SELECT * FROM tbs  LIMIT 3;
 
 -------------------------------------------------------------------------------------------
 
@@ -276,7 +276,7 @@ INSERT INTO english (student_id, grade, grade_str) VALUES
 (4, 44, NULL),
 (5, 90, NULL);
 
-SELECT * FROM english;
+SELECT * FROM english LIMIT 5;
 
 UPDATE english
 SET grade_str = 
@@ -289,7 +289,7 @@ SET grade_str =
 	    ELSE 'F'
     END;
 
-SELECT * FROM english;
+SELECT * FROM english LIMIT 5;
 
 -------------------------------------------------------------------------------------------
 
@@ -305,7 +305,7 @@ INSERT INTO psychology (student_id, grade, grade_str) VALUES
 (2, 95, NULL),
 (3, 84, NULL);
 
-SELECT * FROM psychology;
+SELECT * FROM psychology LIMIT 3;
 
 UPDATE psychology
 SET grade_str = 
@@ -318,7 +318,7 @@ SET grade_str =
 	    ELSE 'F'
     END;
 
-SELECT * FROM psychology;
+SELECT * FROM psychology LIMIT 3;
 
 -------------------------------------------------------------------------------------------
 
@@ -336,7 +336,7 @@ INSERT INTO computevision (student_id, grade, grade_str) VALUES
 (4, 52, NULL),
 (5, 71, NULL);
 
-SELECT * FROM computevision;
+SELECT * FROM computevision LIMIT 5;
 
 UPDATE computevision
 SET grade_str = 
@@ -349,7 +349,7 @@ SET grade_str =
 	    ELSE 'F'
     END;
 
-SELECT * FROM computevision;
+SELECT * FROM computevision LIMIT 5;
 
 -- Запрос, который покажет список всех студентов с их курсами.
 SELECT first_name, last_name, ARRAY_AGG(name) AS list_courses

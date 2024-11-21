@@ -1,119 +1,119 @@
-create database university; 
+CREATE DATABASE university;
 
-create table courses
+CREATE TABLE courses
 (
-	id serial primary key,
-	name varchar(50),
-	is_exam boolean,
-	min_grade integer,
-	max_grade integer
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(50),
+	is_exam BOOLEAN,
+	min_grade INTEGER,
+	max_grade INTEGER
 );
 
-create table groups
+CREATE TABLE groups
 (
-	id serial primary key,
-	full_name varchar(50),
-	short_name varchar(50),
-	students_ids integer[]
+	id SERIAL PRIMARY KEY,
+	full_name VARCHAR(50),
+	short_name VARCHAR(50),
+	students_ids INTEGER[]
 );
 
-create table students
+CREATE TABLE students
 (
-	id serial primary key,
-	first_name varchar(50),
-	last_name varchar(50),
-	group_id integer references groups(id),
-	courses_ids integer[]
+	id SERIAL PRIMARY KEY,
+	first_name VARCHAR(50),
+	last_name VARCHAR(50),
+	group_id INTEGER REFERENCES groups(id),
+	courses_ids INTEGER[]
 );
 
-insert into courses (name, is_exam, min_grade, max_grade) values
-('Соцсети', true, 0, 100),
-('Машинное обучение', true, 0, 100),
-('Теория баесовских сетей', true, 0, 100),
-('Английский язык', false, 0, 100),
-('Психология коммуникаций', false, 0, 100),
-('Компьютерное зрение', true, 0, 100);
+INSERT INTO courses (name, is_exam, min_grade, max_grade) VALUES
+('Соцсети', TRUE, 0, 100),
+('Машинное обучение', TRUE, 0, 100),
+('Теория баесовских сетей', TRUE, 0, 100),
+('Английский язык', FALSE, 0, 100),
+('Психология коммуникаций', FALSE, 0, 100),
+('Компьютерное зрение', TRUE, 0, 100);
 
-select * from courses;
+SELECT * FROM courses LIMIT 10;
 
-insert into groups (full_name, short_name, students_ids) values
-('Искусственный интеллект и наука о данных', 'ИИНОД', null),
-('Программная инженерия', 'ПИ', null);
+INSERT INTO groups (full_name, short_name, students_ids) VALUES
+('Искусственный интеллект и наука о данных', 'ИИНОД', NULL),
+('Программная инженерия', 'ПИ', NULL);
 
-select * from groups;
+SELECT * FROM groups LIMIT 2;
 
-insert into students (first_name, last_name, group_id, courses_ids) values
-('Артём','Пышный', 1, '{1, 2, 3, 4, 5, 6}'),
-('Ирина','Трошина', 1, '{1, 2, 3, 4, 5, 6}'),
-('Джасур','Баракаев', 1, '{1, 2, 3, 4, 5, 6}'),
+INSERT INTO students (first_name, last_name, group_id, courses_ids) VALUES
+('Артём','Пышный', 1, '{1, 2, 3, 4, 5}'),
+('Ирина','Трошина', 1, '{1, 2, 3, 4, 5}'),
+('Джасур','Баракаев', 1, '{1, 2, 3, 4, 5}'),
 ('Кемал','Курей', 2, '{2, 4, 6}'),
 ('Артём','Панов', 2, '{2, 4, 6}');
 
-select * from students;
+SELECT * FROM students  LIMIT 10;
 
 -- С помощью подзапроса заполним значения массива данных students_ids в таблице Groups
 UPDATE groups
 SET students_ids = (
-    SELECT array_agg(students.id)
+    SELECT ARRAY_AGG(students.id)
     FROM students 
     WHERE students.group_id = groups.id
 );
 
-select * from groups;
+SELECT * FROM groups  LIMIT 10;
 
-create table machinelearning
+CREATE TABLE machinelearning
 (
-	student_id integer primary key references students(id),
-	grade integer check(grade >= 0 and grade <= 100),
-	grade_str varchar(50)
+	student_id INTEGER PRIMARY KEY REFERENCES students(id),
+	grade INTEGER CHECK(grade >= 0 AND grade <= 100),
+	grade_str VARCHAR(1)
 );
 
-insert into machinelearning (student_id, grade, grade_str) values
-(1, 60, null),
-(2, 99, null),
-(3, 22, null),
-(4, 37, null),
-(5, 49, null);
+INSERT INTO machinelearning (student_id, grade, grade_str) VALUES
+(1, 60, NULL),
+(2, 99, NULL),
+(3, 22, NULL),
+(4, 37, NULL),
+(5, 49, NULL);
 
-select * from machinelearning;
+SELECT * FROM machinelearning  LIMIT 10;
 
 -- С помощью запроса заполним значения поля grade_str в таблице machinelearning
 UPDATE machinelearning
 SET grade_str = 
-    case 
-	    when grade >= 90 then 'A'
-	    when grade >= 80 then 'B'
-	    when grade >= 70 then 'C'
-	    when grade >= 60 then 'D'
-	    when grade >= 50 then 'E'
-	    else 'F'
-    end;
-    
-select * from machinelearning;
+    CASE 
+	    WHEN grade >= 90 THEN 'A'
+	    WHEN grade >= 80 THEN 'B'
+	    WHEN grade >= 70 THEN 'C'
+	    WHEN grade >= 60 THEN 'D'
+	    WHEN grade >= 50 THEN 'E'
+	    ELSE 'F'
+    END;
+
+SELECT * FROM machinelearning  LIMIT 10;
 
 -- Процедуры фильтрации
 
 -- С помощью Where
-select * from courses
-where is_exam = false;
+SELECT * FROM courses
+WHERE is_exam = FALSE;
 
 -- С помощью условий сравнения и логических операторов
-select * from machinelearning
-where grade > 40 and grade_str != 'F';
+SELECT * FROM machinelearning
+WHERE grade > 40 AND grade_str != 'F';
 
 -- С помощью like для поиска по шаблону
-select * from students
-where first_name like '_ртём';
+SELECT * FROM students
+WHERE first_name LIKE '_ртём';
 
-select * from students
-where last_name like 'Т%';
+SELECT * FROM students
+WHERE last_name LIKE 'Т%';
 
 -- Процедуры агрегации
 
-select avg(grade) from machinelearning;
+SELECT avg(grade) FROM machinelearning;
 
-select min(grade) from machinelearning;
+SELECT min(grade) FROM machinelearning;
 
-select max(grade) from machinelearning;
+SELECT max(grade) FROM machinelearning;
 
-select sum(grade) from machinelearning;
+SELECT sum(grade) FROM machinelearning;
